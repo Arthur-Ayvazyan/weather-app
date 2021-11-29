@@ -18,14 +18,21 @@ function App() {
 
     const handleChangeCountry = (e) => {
         e.preventDefault();
-        setQuery(query);
+
+        if(!query) {
+            setError({isError: true, message: 'Search filed is empty!'})
+            setWeather({})
+            return;
+        }
+
+        setQuery(query.trim());
 
         fetch(`${api.base}weather?q=${query}&units=metric&appid=${api.key}`)
             .then(res => res.json())
             .then(result => {
                 if (result.cod >= 200 && result.cod < 400) {
                     setError({isError: false, message: ''})
-                    setWeather(result);
+                    setWeather(result)
                     setQuery('')
                 } else {
                     setWeather({})
